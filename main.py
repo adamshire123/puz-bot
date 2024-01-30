@@ -12,6 +12,49 @@ logging.basicConfig(level=logging.INFO)
 # process_before_response must be True when running on FaaS
 app = App(process_before_response=True, signing_secret=os.getenv("SIGNING_SECRET"), token=os.getenv("BOT_TOKEN"))
 
+# Put some basic information on the bot home tab.
+@app.event("app_home_opened")
+def update_home_tab(client, event, logger):
+  try:
+    client.views_publish(
+      user_id = event["user"],
+      view={
+        "type": "home",
+        "callback_id": "home_view",
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Welcome to PuzBot!* :tada:"
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "PuzBot is our attempt to streamline the mechanics of starting and stopping activity on a puzzle. More information about this is coming soon."
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "To contribute to Puzbot, please visit <https://github.com/adamshire123/puz-bot|*the Github repo*>"
+            }
+          }
+        ]
+      }
+    )
+
+  except Exception as e:
+    logger.error(f"Error publishing home tab: {e}")
 
 # for testing
 @app.command("/hello")
