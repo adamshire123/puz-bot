@@ -6,6 +6,7 @@ from google.cloud import pubsub_v1
 
 from slack_bolt import App
 from slack_bolt.adapter.google_cloud_functions import SlackRequestHandler
+from puzbot.puzzle import Puzzle
 
 logging.basicConfig(level=logging.INFO)
 
@@ -79,6 +80,15 @@ def initialize_puzzle(body, say, ack):
     else:
         say("please provide a puzzle name: e.g. puz-salad-daze")
 
+@app.command("/create-puzzle")
+def create_puzzle(ack, client, logger, say, command):
+  ack()
+  say(f"I have been requested to create a puzzle: \"{command['text']}\".")
+  # Create the Puzzle object, through which the Slack channel and Google sheet
+  # will be created.
+  draft = Puzzle()
+  draft.create(client, logger, say, command['text'])
+  say(f"I have finished attempting to create this puzzle.")
 
 handler = SlackRequestHandler(app)
 
