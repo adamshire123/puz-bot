@@ -1,0 +1,2 @@
+deploy:
+	gcloud functions deploy python-bolt-function --entry-point cloud_function_handler --trigger-http --set-secrets=BOT_TOKEN=puzbot-slack-bot-token:latest,SIGNING_SECRET=puzbot-slack-signing-secret:latest --service-account puz-bot@puz-bot.iam.gserviceaccount.com --region=us-east1 --source=. --runtime=python311
