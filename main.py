@@ -80,6 +80,27 @@ def initialize_puzzle(body, say, ack):
     else:
         say("please provide a puzzle name: e.g. puz-salad-daze")
 
+# Listener for the demonstration modal
+@app.shortcut("demonstrate_modal")
+def demonstrate_modal(ack, shortcut, client, logger):
+  ack()
+  client.views_open(
+    trigger_id=shortcut["trigger_id"],
+    view={
+      "type": "modal",
+      "title": {"type": "plain_text", "text": "Demonstration modal box"},
+      "close": {"type": "plain_text", "text": "Close"},
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "This is a demonstration of a modal box invoked by a shortcut. If this were a working form, there would be input boxes and a submit button.\n\nThis is only a demonstration."
+          }
+        }
+      ]
+    }
+  )
 @app.command("/create-puzzle")
 def create_puzzle(ack, client, logger, say, command):
   ack()
