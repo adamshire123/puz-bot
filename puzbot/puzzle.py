@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import os, logging
+import os, logging, re
 
 class Puzzle():
   """
@@ -26,12 +26,16 @@ class Puzzle():
       )
       # Log the result which includes information like the ID of the conversation
       logger.info(result)
-      say(f"The channel #{self.data["channel-name"]} has been created!")
+      say(f"The channel #{self.data['channel-name']} has been created!")
 
     except Exception as e:
       # There is a more specific error which could be caught, but this works.
       logger.error("Error creating channel: {}".format(e))
-      say(f"I tried to create the channel #{self.data["channel-name"]}. Unfortunately, I failed.")
+      say(f"I tried to create the channel #{self.data['channel-name']}. Unfortunately, I failed.")
 
   def set_channel_name(self, logger, puzzle_name):
-    return "puzzle-" + puzzle_name.lower()
+    # strip leading or trailing whitespace
+    # convert to lower case
+    # replace any number of spaces between words with one dash
+    # prefix with "puzzle"
+    return "puzzle-" + re.sub(pattern=r" +", repl="-", string=puzzle_name.strip().lower())
