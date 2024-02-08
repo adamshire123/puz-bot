@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import os, logging
+import os, logging, re
 
 class Puzzle():
   """
@@ -34,4 +34,8 @@ class Puzzle():
       say(f"I tried to create the channel #{self.data['channel-name']}. Unfortunately, I failed.")
 
   def set_channel_name(self, logger, puzzle_name):
-    return "puzzle-" + puzzle_name.lower()
+    # strip leading or trailing whitespace
+    # convert to lower case
+    # replace any number of spaces between words with one dash
+    # prefix with "puzzle"
+    return "puzzle-" + re.sub(pattern=r" +", repl="-", string=puzzle_name.strip().lower())
